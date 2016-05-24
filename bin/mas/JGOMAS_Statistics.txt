@@ -1,79 +1,79 @@
 Winner Team: ALLIED
-Duration: [3m:0s]
+Duration: [1m:5s]
 
 Statistics for ALLIED TEAM
 	-GENERAL:
-		* Alive:       	8
-		* Avrg. Health:	100.0
+		* Alive:       	6
+		* Avrg. Health:	74.0
 
 	-OBJECTIVE:
 		* Times Taken: 	1
 		* Times Lost:  	0
 
 	-SHOTS:
-		* EnemyHit:    	0
-		* TeamHit:     	0
-		* FailedHit:   	0
-		* TOTAL:       	0
+		* EnemyHit:    	41
+		* TeamHit:     	156
+		* FailedHit:   	41
+		* TOTAL:       	238
 
 	-MEDIC PACKS:
-		* Delivered:   	12
-		* Team Taken:  	0
-		* Enemy Taken: 	0
-		* Not Taken:   	12
+		* Delivered:   	5
+		* Team Taken:  	2
+		* Enemy Taken: 	3
+		* Not Taken:   	0
 
 	-AMMO PACKS:
-		* Delivered:   	0
-		* Team Taken:  	0
-		* Enemy Taken: 	0
+		* Delivered:   	8
+		* Team Taken:  	5
+		* Enemy Taken: 	1
 		* Not Taken:   	0
 
 	-EFICIENCY:
-		* Medic:       	0.0
-		* FieldOps:    	0.0
-		* Army:        	0.0
+		* Medic:       	1.0
+		* FieldOps:    	1.0
+		* Army:        	0.9705882352941176
 
 	-ANTI-EFICIENCY:
-		* Medic:       	0.0
-		* FieldOps:    	0.0
-		* Army:        	0.0
+		* Medic:       	0.6
+		* FieldOps:    	0.125
+		* Army:        	0.038461538461538464
 
 
 Statistics for AXIS TEAM
 	-GENERAL:
-		* Alive:       	8
-		* Avrg. Health:	97.5
+		* Alive:       	7
+		* Avrg. Health:	61.714287
 
 	-OBJECTIVE:
 		* Times Taken: 	0
 		* Times Lost:  	1
 
 	-SHOTS:
-		* EnemyHit:    	0
-		* TeamHit:     	10
-		* FailedHit:   	0
-		* TOTAL:       	10
+		* EnemyHit:    	50
+		* TeamHit:     	174
+		* FailedHit:   	265
+		* TOTAL:       	489
 
 	-MEDIC PACKS:
-		* Delivered:   	0
-		* Team Taken:  	0
-		* Enemy Taken: 	0
+		* Delivered:   	8
+		* Team Taken:  	6
+		* Enemy Taken: 	2
 		* Not Taken:   	0
 
 	-AMMO PACKS:
-		* Delivered:   	0
-		* Team Taken:  	0
+		* Delivered:   	8
+		* Team Taken:  	5
 		* Enemy Taken: 	0
 		* Not Taken:   	0
 
 	-EFICIENCY:
-		* Medic:       	0.0
-		* FieldOps:    	0.0
-		* Army:        	0.19999999999999996
+		* Medic:       	1.0
+		* FieldOps:    	1.0
+		* Army:        	0.9877300613496932
 
 	-ANTI-EFICIENCY:
-		* Medic:       	0.0
+		* Medic:       	0.25
 		* FieldOps:    	0.0
-		* Army:        	0.8
+		* Army:        	0.040229885057471264
 
 

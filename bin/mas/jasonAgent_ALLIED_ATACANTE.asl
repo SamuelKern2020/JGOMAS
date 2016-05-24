@@ -6,9 +6,7 @@ manager("Manager").
 // Team of troop.
 team("ALLIED").
 // Type of troop.
-type("CLASS_SOLDIER").
-
-
+type("CLASS_ATACANTE").
 
 
 
@@ -30,16 +28,16 @@ type("CLASS_SOLDIER").
 //  GET AGENT TO AIM 
 /////////////////////////////////  
 /**
-* Calculates if there is an enemy at sight.
-* 
-* This plan scans the list <tt> m_FOVObjects</tt> (objects in the Field
-* Of View of the agent) looking for an enemy. If an enemy agent is found, a
-* value of aimed("true") is returned. Note that there is no criterion (proximity, etc.) for the
-* enemy found. Otherwise, the return value is aimed("false")
-* 
-* <em> It's very useful to overload this plan. </em>
-* 
-*/  
+ * Calculates if there is an enemy at sight.
+ *
+ * This plan scans the list <tt> m_FOVObjects</tt> (objects in the Field
+ * Of View of the agent) looking for an enemy. If an enemy agent is found, a
+ * value of aimed("true") is returned. Note that there is no criterion (proximity, etc.) for the
+ * enemy found. Otherwise, the return value is aimed("false")
+ *
+ * <em> It's very useful to overload this plan. </em>
+ * 
+ */
 +!get_agent_to_aim
 <-  ?debug(Mode); if (Mode<=2) { .println("Looking for agents to aim."); }
 ?fovObjects(FOVObjects);
@@ -96,7 +94,7 @@ if (Length > 0) {
     <-  //-waiting_look_response;
         .length(FOVObjects, Length);
         if (Length > 0) {
-            ?debug(Mode); if (Mode<=1) { .println("HAY ", Length, " OBJETOS A MI ALREDEDOR:\n", FOVObjects); }
+            ///?debug(Mode); if (Mode<=1) { .println("HAY ", Length, " OBJETOS A MI ALREDEDOR:\n", FOVObjects); }
         };    
         -look_response(_)[source(M)];
         -+fovObjects(FOVObjects);
@@ -174,16 +172,15 @@ if (Length > 0) {
 /////////////////////////////////
 //  SETUP PRIORITIES
 /////////////////////////////////
-/**  You can change initial priorities if you want to change the behaviour of each agent  **/
-+!setup_priorities
+/**  You can change initial priorities if you want to change the behaviour of each agent  **/+!setup_priorities
     <-  +task_priority("TASK_NONE",0);
-        +task_priority("TASK_GIVE_MEDICPAKS", 2000);
-        +task_priority("TASK_GIVE_AMMOPAKS", 0);
+        +task_priority("TASK_GIVE_MEDICPAKS", 0);
+        +task_priority("TASK_GIVE_AMMOPAKS", 2000);
         +task_priority("TASK_GIVE_BACKUP", 0);
         +task_priority("TASK_GET_OBJECTIVE",1000);
         +task_priority("TASK_ATTACK", 1000);
         +task_priority("TASK_RUN_AWAY", 1500);
-        +task_priority("TASK_GOTO_POSITION", 1500);
+        +task_priority("TASK_GOTO_POSITION", 750);
         +task_priority("TASK_PATROLLING", 500);
         +task_priority("TASK_WALKING_PATH", 1750).   
 
@@ -202,47 +199,27 @@ if (Length > 0) {
  *
  */
 
-+!update_targets
-	<-
-	  ?debug(Mode); if (Mode<=1) { .println("YOUR CODE FOR UPDATE_TARGETS GOES HERE.") };
-	  .my_name(Me);	  
-	  .print("HOLA");
-	  if(corner(0)){
-	      !safe_pos(230,0,30); // Hay valores para safe_pos que no van //
-	      ?safe_pos(XSAFE,YSAFE,ZSAFE);
-	      .println("YENDO A: ",XSAFE,",0,",ZSAFE);
-	      -+corner(1);
-	      !add_task(task(3000,"TASK_GOTO_POSITION1",Me,pos(XSAFE,YSAFE,ZSAFE),""));
-	      
-	  }
-	  else{
-	      if(corner(1)){
-	          !safe_pos(230,0,225);
-			  ?safe_pos(XSAFE,YSAFE,ZSAFE);
-			  .println("YENDO A: ",XSAFE,",0,",ZSAFE);
-			  -+corner(2);
-	          !add_task(task(3000,"TASK_GOTO_POSITION2",Me,pos(XSAFE,YSAFE,ZSAFE),""));
-	          
-	      }
-	      else{
-	          if(corner(2)){
-			      !safe_pos(30,0,230);
-			      ?safe_pos(XSAFE,YSAFE,ZSAFE);
-				  .println("YENDO A: ",XSAFE,",0,",ZSAFE);
-				  !add_task(task(3000,"TASK_GOTO_POSITION3",Me,pos(XSAFE,YSAFE,ZSAFE),""));
-				  -+corner(3);
-			  }
-			  else{
-			      !safe_pos(30,0,25);
-	              ?safe_pos(XSAFE,YSAFE,ZSAFE);
-			      .println("YENDO A: ",XSAFE,",0,",ZSAFE);
-	              !add_task(task(3000,"TASK_GOTO_POSITION4",Me,pos(XSAFE,YSAFE,ZSAFE),""));
-	              -+corner(4);
-	          }
-	      }
-		
-	  }. 
-	   
++!update_targets 
+	<-	?debug(Mode); if (Mode<=1) { .println("YOUR CODE FOR UPDATE_TARGETS GOES HERE.") }
+	?canta(C); 
+	.my_name(M); 
+	if(C==0) {
+		!add_task(task(5000, "TASK_GOTO_POSITION", M, pos(10, 0, 10), ""));
+		-+canta(1);
+	}
+	if(C==1) {
+	!add_task(task(5000, "TASK_GOTO_POSITION", M, pos(246, 0, 10), ""));
+		-+canta(2);
+	}
+	if(C==2) {
+	!add_task(task(5000, "TASK_GOTO_POSITION", M, pos(246, 0, 246), ""));
+		-+canta(3);
+	}
+	if(C==3) {
+	!add_task(task(5000, "TASK_GOTO_POSITION", M, pos(10, 0, 246), ""));
+		-+canta(1);
+	}.
+	
 	
 	
 /////////////////////////////////
@@ -326,8 +303,6 @@ if (Length > 0) {
 //  ANSWER_ACTION_CFM_OR_CFA
 /////////////////////////////////
 
-     
-
     
 +cfm_agree[source(M)]
    <- ?debug(Mode); if (Mode<=1) { .println("YOUR CODE FOR cfm_agree GOES HERE.")};
@@ -346,12 +321,15 @@ if (Length > 0) {
       -cfa_refuse.  
 
 
-
 /////////////////////////////////
 //  Initialize variables
 /////////////////////////////////
 
 +!init
-   <-   
-     -+tasks([]);
-     +corner(0).
+   <- ?debug(Mode); if (Mode<=1) { .println("YOUR CODE FOR init GOES HERE.")}   
+   +conta(0);
+   .  
+
+
+
+
