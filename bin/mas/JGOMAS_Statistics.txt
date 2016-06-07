@@ -1,79 +1,79 @@
 Winner Team: ALLIED
-Duration: [1m:5s]
+Duration: [0m:54s]
 
 Statistics for ALLIED TEAM
 	-GENERAL:
-		* Alive:       	6
-		* Avrg. Health:	74.0
+		* Alive:       	8
+		* Avrg. Health:	92.25
 
 	-OBJECTIVE:
 		* Times Taken: 	1
 		* Times Lost:  	0
 
 	-SHOTS:
-		* EnemyHit:    	41
-		* TeamHit:     	156
-		* FailedHit:   	41
-		* TOTAL:       	238
+		* EnemyHit:    	27
+		* TeamHit:     	7
+		* FailedHit:   	13
+		* TOTAL:       	47
 
 	-MEDIC PACKS:
-		* Delivered:   	5
-		* Team Taken:  	2
-		* Enemy Taken: 	3
+		* Delivered:   	8
+		* Team Taken:  	6
+		* Enemy Taken: 	0
 		* Not Taken:   	0
 
 	-AMMO PACKS:
-		* Delivered:   	8
-		* Team Taken:  	5
-		* Enemy Taken: 	1
+		* Delivered:   	0
+		* Team Taken:  	0
+		* Enemy Taken: 	0
 		* Not Taken:   	0
 
 	-EFICIENCY:
 		* Medic:       	1.0
-		* FieldOps:    	1.0
-		* Army:        	0.9705882352941176
+		* FieldOps:    	0.0
+		* Army:        	0.851063829787234
 
 	-ANTI-EFICIENCY:
-		* Medic:       	0.6
-		* FieldOps:    	0.125
-		* Army:        	0.038461538461538464
+		* Medic:       	0.0
+		* FieldOps:    	0.0
+		* Army:        	1.1428571428571428
 
 
 Statistics for AXIS TEAM
 	-GENERAL:
 		* Alive:       	7
-		* Avrg. Health:	61.714287
+		* Avrg. Health:	87.85714
 
 	-OBJECTIVE:
 		* Times Taken: 	0
 		* Times Lost:  	1
 
 	-SHOTS:
-		* EnemyHit:    	50
-		* TeamHit:     	174
-		* FailedHit:   	265
-		* TOTAL:       	489
+		* EnemyHit:    	29
+		* TeamHit:     	75
+		* FailedHit:   	196
+		* TOTAL:       	300
 
 	-MEDIC PACKS:
-		* Delivered:   	8
-		* Team Taken:  	6
-		* Enemy Taken: 	2
+		* Delivered:   	4
+		* Team Taken:  	4
+		* Enemy Taken: 	0
 		* Not Taken:   	0
 
 	-AMMO PACKS:
-		* Delivered:   	8
-		* Team Taken:  	5
+		* Delivered:   	0
+		* Team Taken:  	0
 		* Enemy Taken: 	0
 		* Not Taken:   	0
 
 	-EFICIENCY:
 		* Medic:       	1.0
-		* FieldOps:    	1.0
-		* Army:        	0.9877300613496932
+		* FieldOps:    	0.0
+		* Army:        	0.9733333333333334
 
 	-ANTI-EFICIENCY:
-		* Medic:       	0.25
+		* Medic:       	0.0
 		* FieldOps:    	0.0
-		* Army:        	0.040229885057471264
+		* Army:        	0.09333333333333334
 
 

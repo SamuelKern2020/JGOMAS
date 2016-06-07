@@ -56,10 +56,10 @@ if (Length > 0) {
         
         //.println("En el bucle, y X vale:", X);
         
-        .nth(X, FOVObjects, Object);
+        .nth(X, FOVObjects, Object); //assign Object to be the Xth object in FOVObjects
         // Object structure
         // [#, TEAM, TYPE, ANGLE, DISTANCE, HEALTH, POSITION ]
-        .nth(2, Object, Type);
+        .nth(2, Object, Type);	//assign Type to be the value held in index 2 of the array called Object
         
         ?debug(Mode); if (Mode<=2) { .println("Objeto Analizado: ", Object); }
         
@@ -71,11 +71,40 @@ if (Length > 0) {
             ?my_formattedTeam(MyTeam);
             
             if (Team == 200) {  // Only if I'm ALLIED
+			//Now ensure that there aren't any agents of the same team in front of the enemy
+			
+			.nth(4, Object, Distance);	//get the distance between the agent and the targeted enemy
+			
+			+safeToFire("true");
+			+innerLoop(0);
+			while (safeToFire("true") & innerLoop(Y) & (Y < Length)) {//while safeToFire is still true, iterate using innerLoop through all the objects in FOV (# = Length)
+				.nth(Y, FOVObjects, TestObject); //assign Object to be the Yth object in FOVObjects
+				.nth(2, TestObject, TestObjectType);
+				.nth(1, TestObject, TestObjectTeam);
+				.nth(3, TestObject, TestObjectAngle);
+				.nth(4, TestObject, TestObjectDistance);
 				
-                ?debug(Mode); if (Mode<=2) { .println("Aiming an enemy. . .", MyTeam, " ", .number(MyTeam) , " ", Team, " ", .number(Team)); }
+				if(TestObjectType < 1000){
+					if(TestObjectTeam == 100){	//if the object is an alled agent (on the same team)
+						if(TestObjectDistance <= Distance){//if a team mate is closer than the targeted enemy, don't fire
+						-+safeToFire("false");
+						?debug(Mode); if (Mode<=2) {.println("FRIENDLY FIRE AVOIDED");}
+						//have the agent move to a position where it can fire safely 
+						
+						}
+					}
+				}
+				-+innerLoop(Y+1);
+			}
+			
+			if(safeToFire("true")){
+			 ?debug(Mode); if (Mode<=2) { .println("Aiming an enemy. . .", MyTeam, " ", .number(MyTeam) , " ", Team, " ", .number(Team)); }
                 +aimed_agent(Object);	
                 -+aimed("true");	//in these two beliefs, the agent immediately changes direction, shoots at the agent, and then returns to previous direction 
                 
+			
+			}
+			
             }
             
         }
@@ -103,7 +132,28 @@ if (Length > 0) {
         //.//;
         !look.
       
-        
+		
+		
+//When the agent grabs the flag, the belief objectivePackTaken is updated. When that happens, the agent should send a message to all of its team members and 
+//have them execute a new task TASK_GOTO_POSITION where the position is the agent's current position. 
++objectivePackTaken(on)
+	<- ?debug(Mode); if (Mode<=3) { .println("THIS MOTHER FUCKIN AGENT HAS THE FUCKING FLAG!!!"); };
+		+iHaveTheFlag(true);
+		?my_position(X,Y,Z);
+		.my_team("ALLIED", E1);
+		.concat("goto(",X, ", ", Y, ", ", Z, ")", Content1); .send_msg_with_conversation_id(E1, tell, Content1, "INT");
+		.println("I just sent a message to everyone!").
+      
++goto(X,Y,Z)[source(A)]
+ <-
+    .println("Received a message of the type goto from ", A);
+ .
+ 
++protectFlagCarrier(X,Y,Z)[source(A)]
+ <-
+    .println("Received a message of the type protectFlagCarrier from ", A);
+	//Add logic that has agent go protect the agent with the flag, who is currently located at X, Y, Z
+ .        
 /////////////////////////////////
 //  PERFORM ACTIONS
 /////////////////////////////////
@@ -143,10 +193,23 @@ if (Length > 0) {
 * <em> It's very useful to overload this plan. </em>
 * 
 */
-+!perform_look_action .	//launched in each cycle (called by !look)
-   /// <- ?debug(Mode); if (Mode<=1) { .println("YOUR CODE FOR PERFORM_LOOK_ACTION GOES HERE.") }.
-   //Can add functionality here (follow a friend, do something with a medic pac, etc)
-   //	YOu can add a new task that is "follow the leader"
+//launched in each cycle (called by !look)
+
++!perform_look_action 	
+   <- ?debug(Mode); if (Mode<=1) { .println("YOUR CODE FOR PERFORM_LOOK_ACTION GOES HERE.") }
+   		//Can add functionality here (follow a friend, do something with a medic pac, etc)
+		//You can add a new task that is "follow the leader"
+		
+		if(iHaveTheFlag(true)){//if the current agent has the flag, it will send out a message to all other agents each turn with its location
+			.println("I HAVE THE FLAG :) "); 
+			?my_position(X,Y,Z);
+			.my_team("ALLIED", E1);
+			.concat("protectFlagCarrier(",X, ", ", Y, ", ", Z, ")", Content1); .send_msg_with_conversation_id(E1, tell, Content1, "INT");
+			.println("I just sent a message to everyone!")
+		}
+   
+   .
+
 
 /**
 * Action to do if this agent cannot shoot.

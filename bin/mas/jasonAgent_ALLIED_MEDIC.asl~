@@ -39,26 +39,27 @@ type("CLASS_MEDIC").
  * <em> It's very useful to overload this plan. </em>
  * 
  */
-+!get_agent_to_aim
+ 
++!get_agent_to_aim	//prevent friendly-fire in this plan
 <-  ?debug(Mode); if (Mode<=2) { .println("Looking for agents to aim."); }
 ?fovObjects(FOVObjects);
 .length(FOVObjects, Length);
 
-?debug(Mode); if (Mode<=1) { .println("El numero de objetos es:", Length); }
+?debug(Mode); if (Mode<=1) { .println("The number of objects in this agent's FOV is:", Length); }
 
 if (Length > 0) {
-    +bucle(0);
+    +bucle(0);	//update the belief "bucle" to 0
     
     -+aimed("false");
     
     while (aimed("false") & bucle(X) & (X < Length)) {
         
-        //.println("En el bucle, y X vale:", X);
+        .println("En el bucle, y X vale:", X);
         
-        .nth(X, FOVObjects, Object);
+        .nth(X, FOVObjects, Object); //assign Object to be the Xth object in FOVObjects
         // Object structure
         // [#, TEAM, TYPE, ANGLE, DISTANCE, HEALTH, POSITION ]
-        .nth(2, Object, Type);
+        .nth(2, Object, Type);	//assign Type to be the value held in index 2 of the array called Object
         
         ?debug(Mode); if (Mode<=2) { .println("Objeto Analizado: ", Object); }
         
@@ -70,11 +71,40 @@ if (Length > 0) {
             ?my_formattedTeam(MyTeam);
             
             if (Team == 200) {  // Only if I'm ALLIED
+			//Now ensure that there aren't any agents of the same team in front of the enemy
+			
+			.nth(4, Object, Distance);	//get the distance between the agent and the targeted enemy
+			
+			+safeToFire("true");
+			+innerLoop(0);
+			while (safeToFire("true") & innerLoop(Y) & (Y < Length)) {//while safeToFire is still true, iterate using innerLoop through all the objects in FOV (# = Length)
+				.nth(Y, FOVObjects, TestObject); //assign Object to be the Yth object in FOVObjects
+				.nth(2, TestObject, TestObjectType);
+				.nth(1, TestObject, TestObjectTeam);
+				.nth(3, TestObject, TestObjectAngle);
+				.nth(4, TestObject, TestObjectDistance);
 				
-                ?debug(Mode); if (Mode<=2) { .println("Aiming an enemy. . .", MyTeam, " ", .number(MyTeam) , " ", Team, " ", .number(Team)); }
-                +aimed_agent(Object);
-                -+aimed("true");
+				if(TestObjectType < 1000){
+					if(TestObjectTeam == 100){	//if the object is an alled agent (on the same team)
+						if(TestObjectDistance <= Distance){//if a team mate is closer than the targeted enemy, don't fire
+						-+safeToFire("false");
+						.println("FRIENDLY FIRE AVOIDED");
+						//have the agent move to a position where it can fire safely 
+						
+						}
+					}
+				}
+				-+innerLoop(Y+1);
+			}
+			
+			if(safeToFire("true")){
+			 ?debug(Mode); if (Mode<=2) { .println("Aiming an enemy. . .", MyTeam, " ", .number(MyTeam) , " ", Team, " ", .number(Team)); }
+                +aimed_agent(Object);	
+                -+aimed("true");	//in these two beliefs, the agent immediately changes direction, shoots at the agent, and then returns to previous direction 
                 
+			
+			}
+			
             }
             
         }
@@ -83,10 +113,11 @@ if (Length > 0) {
         
     }
     
-   
+    
 }
 
 -bucle(_).
+
 
 /////////////////////////////////
 //  LOOK RESPONSE
@@ -101,6 +132,13 @@ if (Length > 0) {
         -+fovObjects(FOVObjects);
         //.//;
         !look.
+      
+
+//When the agent grabs the flag, the belief objectivePackTaken is updated. When that happens, the agent should send a message to all of its team members and 
+//have them execute a new task TASK_GOTO_POSITION where the position is the agent's current position. 
++objectivePackTaken(on)
+	<- ?debug(Mode); if (Mode<=3) { .println("THIS MOTHER FUCKIN AGENT HAS THE FUCKING FLAG!!!"); }
+	.
       
         
 /////////////////////////////////

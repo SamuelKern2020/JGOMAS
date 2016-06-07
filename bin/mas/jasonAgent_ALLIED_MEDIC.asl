@@ -54,7 +54,7 @@ if (Length > 0) {
     
     while (aimed("false") & bucle(X) & (X < Length)) {
         
-        .println("En el bucle, y X vale:", X);
+        //.println("En el bucle, y X vale:", X);
         
         .nth(X, FOVObjects, Object); //assign Object to be the Xth object in FOVObjects
         // Object structure
@@ -88,12 +88,13 @@ if (Length > 0) {
 					if(TestObjectTeam == 100){	//if the object is an alled agent (on the same team)
 						if(TestObjectDistance <= Distance){//if a team mate is closer than the targeted enemy, don't fire
 						-+safeToFire("false");
-						.println("FRIENDLY FIRE AVOIDED");
+						?debug(Mode); if (Mode<=2) {.println("FRIENDLY FIRE AVOIDED");}
 						//have the agent move to a position where it can fire safely 
 						
 						}
 					}
 				}
+				-+innerLoop(Y+1);
 			}
 			
 			if(safeToFire("true")){
@@ -136,10 +137,24 @@ if (Length > 0) {
 //When the agent grabs the flag, the belief objectivePackTaken is updated. When that happens, the agent should send a message to all of its team members and 
 //have them execute a new task TASK_GOTO_POSITION where the position is the agent's current position. 
 +objectivePackTaken(on)
-	<- ?debug(Mode); if (Mode<=3) { .println("THIS MOTHER FUCKIN AGENT HAS THE FUCKING FLAG!!!"); }
-	.
+	<- ?debug(Mode); if (Mode<=3) { .println("THIS MOTHER FUCKIN AGENT HAS THE FUCKING FLAG!!!"); };
+		+iHaveTheFlag(true);
+		?my_position(X,Y,Z);
+		.my_team("ALLIED", E1);
+		.concat("goto(",X, ", ", Y, ", ", Z, ")", Content1); .send_msg_with_conversation_id(E1, tell, Content1, "INT");
+		.println("I just sent a message to everyone!").
       
-        
++goto(X,Y,Z)[source(A)]
+ <-
+    .println("Received a message of the type goto from ", A);
+ .
+ 
++protectFlagCarrier(X,Y,Z)[source(A)]
+ <-
+    .println("Received a message of the type protectFlagCarrier from ", A);
+	//Add logic that has agent go protect the agent with the flag, who is currently located at X, Y, Z
+ .
+            
 /////////////////////////////////
 //  PERFORM ACTIONS
 /////////////////////////////////
@@ -179,8 +194,23 @@ if (Length > 0) {
 * <em> It's very useful to overload this plan. </em>
 * 
 */
-+!perform_look_action .
-   /// <- ?debug(Mode); if (Mode<=1) { .println("YOUR CODE FOR PERFORM_LOOK_ACTION GOES HERE.") }. 
+//launched in each cycle (called by !look)
+
++!perform_look_action 	
+   <- ?debug(Mode); if (Mode<=1) { .println("YOUR CODE FOR PERFORM_LOOK_ACTION GOES HERE.") }
+   		//Can add functionality here (follow a friend, do something with a medic pac, etc)
+		//You can add a new task that is "follow the leader"
+		
+		if(iHaveTheFlag(true)){//if the current agent has the flag, it will send out a message to all other agents each turn with its location
+			.println("I HAVE THE FLAG :) "); 
+			?my_position(X,Y,Z);
+			.my_team("ALLIED", E1);
+			.concat("protectFlagCarrier(",X, ", ", Y, ", ", Z, ")", Content1); .send_msg_with_conversation_id(E1, tell, Content1, "INT");
+			.println("I just sent a message to everyone!")
+		}
+   
+   .
+
 
 /**
 * Action to do if this agent cannot shoot.
