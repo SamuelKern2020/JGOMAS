@@ -149,11 +149,14 @@ if (Length > 0) {
     .println("Received a message of the type goto from ", A);
  .
  
-+protectFlagCarrier(X,Y,Z)[source(A)]
++protectFlagCarrier(X,Y,Z)[source(A)] //called if the agent has the flag. Sends a message w/ its location so all other agents can come give help. 
  <-
     .println("Received a message of the type protectFlagCarrier from ", A);
 	//Add logic that has agent go protect the agent with the flag, who is currently located at X, Y, Z
- .
+	!add_task(task(1000,"TASK_GOTO_POSITION", A, pos(X, Y, Z), "")); // (OPTIONAL_PRIORITY, TASK_NAME, AGENT_WHO_TRIGGERED_TASK, POSITION, OPTIONAL_CONTENT)
+    -+state(standing);
+    -goto(_,_,_) 
+	.
             
 /////////////////////////////////
 //  PERFORM ACTIONS

@@ -147,13 +147,19 @@ if (Length > 0) {
 +goto(X,Y,Z)[source(A)]
  <-
     .println("Received a message of the type goto from ", A);
+	
+	
  .
  
-+protectFlagCarrier(X,Y,Z)[source(A)]
++protectFlagCarrier(X,Y,Z)[source(A)] //called if the agent has the flag. Sends a message w/ its location so all other agents can come give help. 
  <-
     .println("Received a message of the type protectFlagCarrier from ", A);
 	//Add logic that has agent go protect the agent with the flag, who is currently located at X, Y, Z
- .
+	!add_task(task("TASK_GOTO_POSITION", A, pos(X, Y, Z), "")); // (OPTIONAL_PRIORITY, TASK_NAME, AGENT_WHO_TRIGGERED_TASK, POSITION, OPTIONAL_CONTENT)
+    -+state(standing);
+    -goto(_,_,_) 
+	.
+
 /////////////////////////////////
 //  PERFORM ACTIONS
 /////////////////////////////////
@@ -207,7 +213,8 @@ if (Length > 0) {
 			.concat("protectFlagCarrier(",X, ", ", Y, ", ", Z, ")", Content1); .send_msg_with_conversation_id(E1, tell, Content1, "INT");
 			.println("I just sent a message to everyone!")
 		}
-   
+		
+
    .
 
 
@@ -267,8 +274,29 @@ if (Length > 0) {
  *
  */
 
-+!update_targets
-	<-	?debug(Mode); if (Mode<=1) { .println("YOUR CODE FOR UPDATE_TARGETS GOES HERE.") }.
++!update_targets //triggered when agent changes to a standing state
+	<-	?debug(Mode); if (Mode<=1) { .println("YOUR CODE FOR UPDATE_TARGETS GOES HERE.") }
+	//you can add more complicated logic here to have the agents themselves make decisions about which tasks to carry out. For now tasks will just be given priority when they're asigned
+		?tasks(Tasks);
+		.length(Tasks, TaskListLength);
+		if (TaskListLength <= 0) {
+        	.println("Agent has NO TASKS");	//apparently this HAS to be here for the agent to not Spazz out
+		}
+		else{
+			.prinln("Agent has this many tasks: ", TaskListLength); //apparently this HAS to be here for the agent to not Spazz out
+			}
+			
+        //+bucle(0);
+        //while(bucle(X) & (X < Length)){
+            //.nth(X, TaskList, Task);
+            //.println(Task);
+            //+bucle(X+1);
+        //}
+		
+	
+	
+	
+	.
 	
 	
 	
